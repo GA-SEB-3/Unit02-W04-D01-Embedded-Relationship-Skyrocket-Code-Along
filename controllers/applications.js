@@ -5,12 +5,42 @@ const User = require('../models/user')
 
 // ALl routes for application
 
-router.get("/sara",(req,res)=>{
-    res.send("sara route in application")
+// controllers/applications.js
+
+router.get('/', async (req, res) => {
+    try {
+      res.render('applications/index.ejs');
+    } catch (error) {
+      console.log(error);
+      res.redirect('/');
+    }
+  });
+  
+
+
+router.get("/new", async(req,res)=>{
+    res.render("applications/new.ejs")
 })
 
-router.get("/",(req,res)=>{
-    res.send("Hello applications index route")
-})
+router.post("/",async(req,res)=>{
 
+    try{
+        // const currentUser = await User.findByIdAndUpdate(req.session.user._id, {$push:{applications:req.body}})
+
+        const currentUser = await User.findById(req.session.user._id);
+
+        currentUser.applications.push(req.body)
+
+        await currentUser.save()
+
+        res.redirect(`/users/${currentUser._id}/applications`)
+         
+
+        console.log(currentUser)
+    
+    }catch(err){
+        console.log(err);
+        res.redirect('/');     
+    }
+})
 module.exports = router
