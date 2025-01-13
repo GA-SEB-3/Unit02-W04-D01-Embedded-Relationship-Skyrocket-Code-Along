@@ -19,5 +19,13 @@
         <p>Posting Link: <%=application.postingLink%></p>
 
     <%}%>
+
+    <form action="/users/<%=user._id%>/applications/<%=application._id%>?_method=DELETE" method="POST">
+        <button>Delete Application</button>
+    </form>
+
+    <a href="/users/<%= user._id %>/applications/<%= application._id %>/edit">
+        Edit this application
+      </a>
 </body>
 </html>
