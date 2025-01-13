@@ -9,7 +9,10 @@ const User = require('../models/user')
 
 router.get('/', async (req, res) => {
     try {
-      res.render('applications/index.ejs');
+      const currentUser = await User.findById(req.session.user._id)
+
+      console.log(currentUser.applications)
+      res.render('applications/index.ejs',{applications:currentUser.applications});
     } catch (error) {
       console.log(error);
       res.redirect('/');
@@ -43,4 +46,25 @@ router.post("/",async(req,res)=>{
         res.redirect('/');     
     }
 })
+
+router.get('/:applicationId',async(req,res)=>{
+  try{
+
+    const currentUser = await User.findById(req.session.user._id)
+
+    console.log(currentUser)
+
+    const application = currentUser.applications.id(req.params.applicationId)
+
+    console.log(application)
+
+    res.render("applications/show.ejs",{application:application})
+  
+  }catch(error){
+    console.log(error)
+    res.redirect("/")
+  }
+})
+
+
 module.exports = router
